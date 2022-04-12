@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "api/v1/Product")
+@RequestMapping(value ="api/v1/Product")
 public class ProductController {
     
     @Autowired
     ProductService productService;
 
 
-    @GetMapping(path = "/shoAllProduct")
+    @GetMapping(path ="/shoAllProduct")
     public Object shoAll(){
         try {
             return productService.showAllProduct();

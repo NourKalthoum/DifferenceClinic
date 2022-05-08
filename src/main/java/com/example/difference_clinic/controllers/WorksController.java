@@ -65,7 +65,6 @@ public class WorksController {
             updateWork.setTitle(work.getTitle());
             updateWork.setDescription(work.getDescription());
             updateWork.setImage(work.getImage());
-            updateWork.setOrder(work.getOrder());
             worksService.updatework(id, updateWork);
             return updateWork;
         } catch (Exception e) {

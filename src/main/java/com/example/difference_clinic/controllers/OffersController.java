@@ -65,7 +65,6 @@ public class OffersController {
         updateOffer.setTitle(offer.getTitle());
         updateOffer.setDescription(offer.getDescription());
         updateOffer.setImage(offer.getImage());
-        updateOffer.setOrder(offer.getOrder());
         offersService.updateOffer(id, updateOffer);
         return updateOffer;
     } catch (Exception e) {

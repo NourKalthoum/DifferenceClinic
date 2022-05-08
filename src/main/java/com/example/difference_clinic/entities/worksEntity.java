@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.lang.NonNull;
+
 
 @Entity
 @Table(name = "works")
@@ -20,19 +22,15 @@ public class worksEntity {
     private String title;
     private String description;
     private String image;
-    @Column(name = "order_works")
-    private String order;
-
 
     public worksEntity() {
     }
 
-    public worksEntity(Long id, String title, String description, String image, String order) {
+    public worksEntity(Long id, String title, String description, String image) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
-        this.order = order;
     }
 
     public Long getId() {
@@ -67,14 +65,6 @@ public class worksEntity {
         this.image = image;
     }
 
-    public String getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
-    }
-
     public worksEntity id(Long id) {
         setId(id);
         return this;
@@ -95,11 +85,6 @@ public class worksEntity {
         return this;
     }
 
-    public worksEntity order(String order) {
-        setOrder(order);
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -108,12 +93,12 @@ public class worksEntity {
             return false;
         }
         worksEntity worksEntity = (worksEntity) o;
-        return Objects.equals(id, worksEntity.id) && Objects.equals(title, worksEntity.title) && Objects.equals(description, worksEntity.description) && Objects.equals(image, worksEntity.image) && Objects.equals(order, worksEntity.order);
+        return Objects.equals(id, worksEntity.id) && Objects.equals(title, worksEntity.title) && Objects.equals(description, worksEntity.description) && Objects.equals(image, worksEntity.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, image, order);
+        return Objects.hash(id, title, description, image);
     }
 
     @Override
@@ -123,8 +108,7 @@ public class worksEntity {
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", image='" + getImage() + "'" +
-            ", order='" + getOrder() + "'" +
             "}";
     }
-
+   
 }

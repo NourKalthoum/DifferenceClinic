@@ -20,7 +20,7 @@ public class WorksService {
         
 		List<worksEntity> works = new ArrayList<worksEntity>();
 
-		for(worksEntity work : worksRepo.findAll()) {
+		for(worksEntity work : worksRepo.findAllByOrderByIdDesc()) {
 			works.add(work);
 		}
 		

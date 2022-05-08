@@ -65,7 +65,6 @@ public class ProductController {
         updateProduct.setName(product.getName());
         updateProduct.setPrice(product.getPrice());
         updateProduct.setImage(product.getImage());
-        updateProduct.setOrder(product.getOrder());
         productService.updateProduct(id, updateProduct);
         return updateProduct;
     } catch (Exception e) {

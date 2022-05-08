@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.lang.NonNull;
+
 @Entity
 @Table(name = "offers")
 public class OffersEntity {
@@ -19,19 +21,17 @@ public class OffersEntity {
     private String title;
     private String description;
     private String image;
-    @Column(name = "order_offers")
-    private String order;
+    
 
 
     public OffersEntity() {
     }
 
-    public OffersEntity(Long id, String title, String description, String image, String order) {
+    public OffersEntity(Long id, String title, String description, String image) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
-        this.order = order;
     }
 
     public Long getId() {
@@ -66,14 +66,6 @@ public class OffersEntity {
         this.image = image;
     }
 
-    public String getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
-    }
-
     public OffersEntity id(Long id) {
         setId(id);
         return this;
@@ -94,11 +86,6 @@ public class OffersEntity {
         return this;
     }
 
-    public OffersEntity order(String order) {
-        setOrder(order);
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -107,12 +94,12 @@ public class OffersEntity {
             return false;
         }
         OffersEntity offersEntity = (OffersEntity) o;
-        return Objects.equals(id, offersEntity.id) && Objects.equals(title, offersEntity.title) && Objects.equals(description, offersEntity.description) && Objects.equals(image, offersEntity.image) && Objects.equals(order, offersEntity.order);
+        return Objects.equals(id, offersEntity.id) && Objects.equals(title, offersEntity.title) && Objects.equals(description, offersEntity.description) && Objects.equals(image, offersEntity.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, image, order);
+        return Objects.hash(id, title, description, image);
     }
 
     @Override
@@ -122,7 +109,6 @@ public class OffersEntity {
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", image='" + getImage() + "'" +
-            ", order='" + getOrder() + "'" +
             "}";
     }
 

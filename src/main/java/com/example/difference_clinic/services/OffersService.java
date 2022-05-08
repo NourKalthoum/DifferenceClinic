@@ -19,7 +19,7 @@ public class OffersService {
         
 		List<OffersEntity> Offers = new ArrayList<OffersEntity>();
 
-		for(OffersEntity Offer : offersRepo.findAll()) {
+		for(OffersEntity Offer : offersRepo.findAllByOrderByIdDesc()) {
 			Offers.add(Offer);
 		}
 		

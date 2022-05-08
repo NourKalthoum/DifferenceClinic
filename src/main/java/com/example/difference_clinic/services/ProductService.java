@@ -20,7 +20,7 @@ public class ProductService {
         
 		List<ProductEntity> products = new ArrayList<ProductEntity>();
 
-		for(ProductEntity product : productRepo.findAll()) {
+		for(ProductEntity product : productRepo.findAllByOrderByIdDesc()) {
 			products.add(product);
 		}
 		

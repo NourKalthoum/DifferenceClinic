@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.lang.NonNull;
+
 
 @Entity
 @Table(name = "Product")
@@ -20,19 +22,15 @@ public class ProductEntity {
     private String name;
     private String price;
     private String image;
-    @Column(name = "order_product")
-    private String order;
-
 
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id, String name, String price, String image, String order) {
+    public ProductEntity(Long id, String name, String price, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
-        this.order = order;
     }
 
     public Long getId() {
@@ -67,14 +65,6 @@ public class ProductEntity {
         this.image = image;
     }
 
-    public String getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
-    }
-
     public ProductEntity id(Long id) {
         setId(id);
         return this;
@@ -95,11 +85,6 @@ public class ProductEntity {
         return this;
     }
 
-    public ProductEntity order(String order) {
-        setOrder(order);
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -108,12 +93,12 @@ public class ProductEntity {
             return false;
         }
         ProductEntity productEntity = (ProductEntity) o;
-        return Objects.equals(id, productEntity.id) && Objects.equals(name, productEntity.name) && Objects.equals(price, productEntity.price) && Objects.equals(image, productEntity.image) && Objects.equals(order, productEntity.order);
+        return Objects.equals(id, productEntity.id) && Objects.equals(name, productEntity.name) && Objects.equals(price, productEntity.price) && Objects.equals(image, productEntity.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, image, order);
+        return Objects.hash(id, name, price, image);
     }
 
     @Override
@@ -123,9 +108,7 @@ public class ProductEntity {
             ", name='" + getName() + "'" +
             ", price='" + getPrice() + "'" +
             ", image='" + getImage() + "'" +
-            ", order='" + getOrder() + "'" +
             "}";
     }
-
-    
+   
 }

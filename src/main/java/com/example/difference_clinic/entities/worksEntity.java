@@ -2,14 +2,12 @@ package com.example.difference_clinic.entities;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.lang.NonNull;
 
 
 @Entity

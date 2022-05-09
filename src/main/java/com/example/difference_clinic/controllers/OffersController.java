@@ -31,7 +31,7 @@ public class OffersController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-    // all
+    // mobile
     @GetMapping(path = "/detailesOffer")
     public Object detailesOffer(@RequestParam(name = "id") Long id){
         try {

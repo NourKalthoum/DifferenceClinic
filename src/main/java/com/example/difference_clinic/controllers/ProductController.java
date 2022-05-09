@@ -31,7 +31,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-    // all
+    // mobile
     @GetMapping(path = "/detailesProduct")
     public Object detailesProduct(@RequestParam(name = "id") Long id){
         try {

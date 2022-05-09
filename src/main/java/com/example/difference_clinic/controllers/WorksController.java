@@ -31,7 +31,7 @@ public class WorksController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
             }
         }
-        // all
+        // mobile
         @GetMapping(path = "/detailesWork")
         public Object detailesWork(@RequestParam(name = "id") Long id){
             try {

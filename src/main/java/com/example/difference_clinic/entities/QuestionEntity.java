@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "question")
 public class QuestionEntity {
@@ -18,18 +20,20 @@ public class QuestionEntity {
     private Long id;
     private String questionText;
     private String answer;
-    private String questionStatus;
+    private boolean common;
+    @JsonIgnoreProperties(value = {"question"},allowSetters = true)
     @ManyToOne(targetEntity = UserEntity.class)
     private UserEntity user;
+
 
     public QuestionEntity() {
     }
 
-    public QuestionEntity(Long id, String questionText, String answer, String questionStatus, UserEntity user) {
+    public QuestionEntity(Long id, String questionText, String answer, boolean common, UserEntity user) {
         this.id = id;
         this.questionText = questionText;
         this.answer = answer;
-        this.questionStatus = questionStatus;
+        this.common = common;
         this.user = user;
     }
 
@@ -57,12 +61,16 @@ public class QuestionEntity {
         this.answer = answer;
     }
 
-    public String getQuestionStatus() {
-        return this.questionStatus;
+    public boolean isCommon() {
+        return this.common;
     }
 
-    public void setQuestionStatus(String questionStatus) {
-        this.questionStatus = questionStatus;
+    public boolean getCommon() {
+        return this.common;
+    }
+
+    public void setCommon(boolean common) {
+        this.common = common;
     }
 
     public UserEntity getUser() {
@@ -88,8 +96,8 @@ public class QuestionEntity {
         return this;
     }
 
-    public QuestionEntity questionStatus(String questionStatus) {
-        setQuestionStatus(questionStatus);
+    public QuestionEntity common(boolean common) {
+        setCommon(common);
         return this;
     }
 
@@ -106,12 +114,12 @@ public class QuestionEntity {
             return false;
         }
         QuestionEntity questionEntity = (QuestionEntity) o;
-        return Objects.equals(id, questionEntity.id) && Objects.equals(questionText, questionEntity.questionText) && Objects.equals(answer, questionEntity.answer) && Objects.equals(questionStatus, questionEntity.questionStatus) && Objects.equals(user, questionEntity.user);
+        return Objects.equals(id, questionEntity.id) && Objects.equals(questionText, questionEntity.questionText) && Objects.equals(answer, questionEntity.answer) && common == questionEntity.common && Objects.equals(user, questionEntity.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, questionText, answer, questionStatus, user);
+        return Objects.hash(id, questionText, answer, common, user);
     }
 
     @Override
@@ -120,10 +128,9 @@ public class QuestionEntity {
             " id='" + getId() + "'" +
             ", questionText='" + getQuestionText() + "'" +
             ", answer='" + getAnswer() + "'" +
-            ", questionStatus='" + getQuestionStatus() + "'" +
+            ", common='" + isCommon() + "'" +
             ", user='" + getUser() + "'" +
             "}";
     }
-
-
+   
 }

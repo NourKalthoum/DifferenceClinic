@@ -22,15 +22,18 @@ public class ProductEntity {
     private String name;
     private String price;
     private String image;
+    private String description;
+
 
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id, String name, String price, String image) {
+    public ProductEntity(Long id, String name, String price, String image, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
+        this.description = description;
     }
 
     public Long getId() {
@@ -65,6 +68,14 @@ public class ProductEntity {
         this.image = image;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public ProductEntity id(Long id) {
         setId(id);
         return this;
@@ -85,6 +96,11 @@ public class ProductEntity {
         return this;
     }
 
+    public ProductEntity description(String description) {
+        setDescription(description);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -93,12 +109,12 @@ public class ProductEntity {
             return false;
         }
         ProductEntity productEntity = (ProductEntity) o;
-        return Objects.equals(id, productEntity.id) && Objects.equals(name, productEntity.name) && Objects.equals(price, productEntity.price) && Objects.equals(image, productEntity.image);
+        return Objects.equals(id, productEntity.id) && Objects.equals(name, productEntity.name) && Objects.equals(price, productEntity.price) && Objects.equals(image, productEntity.image) && Objects.equals(description, productEntity.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, image);
+        return Objects.hash(id, name, price, image, description);
     }
 
     @Override
@@ -108,7 +124,8 @@ public class ProductEntity {
             ", name='" + getName() + "'" +
             ", price='" + getPrice() + "'" +
             ", image='" + getImage() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
-   
+    
 }

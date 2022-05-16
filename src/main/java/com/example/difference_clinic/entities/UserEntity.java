@@ -1,5 +1,6 @@
 package com.example.difference_clinic.entities;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "user")
 public class UserEntity {
@@ -19,23 +24,25 @@ public class UserEntity {
     private Long id;
     private String firstName;
     private String lastName;
-    private Long mobile;
+    private String mobile;
     private String gender;
     private String job;
-    private String birthday;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date birthday;
     private String userType;
     private Long score;
     private String socialStatus;
-    private String patientStatus;
-    @OneToMany(mappedBy = "user")
-    private List<QuestionEntity> questions;
+    private boolean patientStatus;
+    // @JsonIgnoreProperties(value = {"user"},allowSetters = true)
+    // @OneToMany(mappedBy = "user")
+    // private List<QuestionEntity> questions;
 
 
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String firstName, String lastName, Long mobile, String gender, String job, String birthday, String userType, Long score, String socialStatus, String patientStatus, List<QuestionEntity> questions) {
+    public UserEntity(Long id, String firstName, String lastName, String mobile, String gender, String job, Date birthday, String userType, Long score, String socialStatus, boolean patientStatus) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,7 +54,6 @@ public class UserEntity {
         this.score = score;
         this.socialStatus = socialStatus;
         this.patientStatus = patientStatus;
-        this.questions = questions;
     }
 
     public Long getId() {
@@ -74,11 +80,11 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    public Long getMobile() {
+    public String getMobile() {
         return this.mobile;
     }
 
-    public void setMobile(Long mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
@@ -98,11 +104,11 @@ public class UserEntity {
         this.job = job;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return this.birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
@@ -130,20 +136,16 @@ public class UserEntity {
         this.socialStatus = socialStatus;
     }
 
-    public String getPatientStatus() {
+    public boolean isPatientStatus() {
         return this.patientStatus;
     }
 
-    public void setPatientStatus(String patientStatus) {
+    public boolean getPatientStatus() {
+        return this.patientStatus;
+    }
+
+    public void setPatientStatus(boolean patientStatus) {
         this.patientStatus = patientStatus;
-    }
-
-    public List<QuestionEntity> getQuestions() {
-        return this.questions;
-    }
-
-    public void setQuestions(List<QuestionEntity> questions) {
-        this.questions = questions;
     }
 
     public UserEntity id(Long id) {
@@ -161,7 +163,7 @@ public class UserEntity {
         return this;
     }
 
-    public UserEntity mobile(Long mobile) {
+    public UserEntity mobile(String mobile) {
         setMobile(mobile);
         return this;
     }
@@ -176,7 +178,7 @@ public class UserEntity {
         return this;
     }
 
-    public UserEntity birthday(String birthday) {
+    public UserEntity birthday(Date birthday) {
         setBirthday(birthday);
         return this;
     }
@@ -196,13 +198,8 @@ public class UserEntity {
         return this;
     }
 
-    public UserEntity patientStatus(String patientStatus) {
+    public UserEntity patientStatus(boolean patientStatus) {
         setPatientStatus(patientStatus);
-        return this;
-    }
-
-    public UserEntity questions(List<QuestionEntity> questions) {
-        setQuestions(questions);
         return this;
     }
 
@@ -214,12 +211,12 @@ public class UserEntity {
             return false;
         }
         UserEntity userEntity = (UserEntity) o;
-        return Objects.equals(id, userEntity.id) && Objects.equals(firstName, userEntity.firstName) && Objects.equals(lastName, userEntity.lastName) && Objects.equals(mobile, userEntity.mobile) && Objects.equals(gender, userEntity.gender) && Objects.equals(job, userEntity.job) && Objects.equals(birthday, userEntity.birthday) && Objects.equals(userType, userEntity.userType) && Objects.equals(score, userEntity.score) && Objects.equals(socialStatus, userEntity.socialStatus) && Objects.equals(patientStatus, userEntity.patientStatus) && Objects.equals(questions, userEntity.questions);
+        return Objects.equals(id, userEntity.id) && Objects.equals(firstName, userEntity.firstName) && Objects.equals(lastName, userEntity.lastName) && Objects.equals(mobile, userEntity.mobile) && Objects.equals(gender, userEntity.gender) && Objects.equals(job, userEntity.job) && Objects.equals(birthday, userEntity.birthday) && Objects.equals(userType, userEntity.userType) && Objects.equals(score, userEntity.score) && Objects.equals(socialStatus, userEntity.socialStatus) && patientStatus == userEntity.patientStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, mobile, gender, job, birthday, userType, score, socialStatus, patientStatus, questions);
+        return Objects.hash(id, firstName, lastName, mobile, gender, job, birthday, userType, score, socialStatus, patientStatus);
     }
 
     @Override
@@ -235,9 +232,9 @@ public class UserEntity {
             ", userType='" + getUserType() + "'" +
             ", score='" + getScore() + "'" +
             ", socialStatus='" + getSocialStatus() + "'" +
-            ", patientStatus='" + getPatientStatus() + "'" +
-            ", questions='" + getQuestions() + "'" +
+            ", patientStatus='" + isPatientStatus() + "'" +
             "}";
     }
+
 
 }

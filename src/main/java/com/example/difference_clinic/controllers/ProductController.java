@@ -31,6 +31,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+    
     // mobile
     @GetMapping(path = "/detailesProduct")
     public Object detailesProduct(@RequestParam(name = "id") Long id){
@@ -65,6 +66,7 @@ public class ProductController {
         updateProduct.setName(product.getName());
         updateProduct.setPrice(product.getPrice());
         updateProduct.setImage(product.getImage());
+        updateProduct.setDescription(product.getDescription());
         productService.updateProduct(id, updateProduct);
         return updateProduct;
     } catch (Exception e) {

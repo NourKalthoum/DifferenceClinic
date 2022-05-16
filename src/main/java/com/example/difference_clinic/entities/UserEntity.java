@@ -1,13 +1,17 @@
 package com.example.difference_clinic.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,36 +28,43 @@ public class UserEntity {
     private Long id;
     private String firstName;
     private String lastName;
+    private String userName;
+    private String password;
     private String mobile;
     private String gender;
     private String job;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
-    private String userType;
     private Long score;
     private String socialStatus;
-    private boolean patientStatus;
+    private boolean isActive;
+    private String codeNum;
     // @JsonIgnoreProperties(value = {"user"},allowSetters = true)
     // @OneToMany(mappedBy = "user")
     // private List<QuestionEntity> questions;
 
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection <Role>roles= new ArrayList();
+   
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String firstName, String lastName, String mobile, String gender, String job, Date birthday, String userType, Long score, String socialStatus, boolean patientStatus) {
+    public UserEntity(Long id, String firstName, String lastName, String userName, String password, String mobile, String gender, String job, Date birthday, Long score, String socialStatus, boolean isActive, String codeNum, Collection<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
         this.mobile = mobile;
         this.gender = gender;
         this.job = job;
         this.birthday = birthday;
-        this.userType = userType;
         this.score = score;
         this.socialStatus = socialStatus;
-        this.patientStatus = patientStatus;
+        this.isActive = isActive;
+        this.codeNum = codeNum;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -78,6 +89,22 @@ public class UserEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMobile() {
@@ -112,14 +139,6 @@ public class UserEntity {
         this.birthday = birthday;
     }
 
-    public String getUserType() {
-        return this.userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
-
     public Long getScore() {
         return this.score;
     }
@@ -136,16 +155,32 @@ public class UserEntity {
         this.socialStatus = socialStatus;
     }
 
-    public boolean isPatientStatus() {
-        return this.patientStatus;
+    public boolean isIsActive() {
+        return this.isActive;
     }
 
-    public boolean getPatientStatus() {
-        return this.patientStatus;
+    public boolean getIsActive() {
+        return this.isActive;
     }
 
-    public void setPatientStatus(boolean patientStatus) {
-        this.patientStatus = patientStatus;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getCodeNum() {
+        return this.codeNum;
+    }
+
+    public void setCodeNum(String codeNum) {
+        this.codeNum = codeNum;
+    }
+
+    public Collection<Role> getRoles() {
+        return this.roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 
     public UserEntity id(Long id) {
@@ -160,6 +195,16 @@ public class UserEntity {
 
     public UserEntity lastName(String lastName) {
         setLastName(lastName);
+        return this;
+    }
+
+    public UserEntity userName(String userName) {
+        setUserName(userName);
+        return this;
+    }
+
+    public UserEntity password(String password) {
+        setPassword(password);
         return this;
     }
 
@@ -183,11 +228,6 @@ public class UserEntity {
         return this;
     }
 
-    public UserEntity userType(String userType) {
-        setUserType(userType);
-        return this;
-    }
-
     public UserEntity score(Long score) {
         setScore(score);
         return this;
@@ -198,8 +238,18 @@ public class UserEntity {
         return this;
     }
 
-    public UserEntity patientStatus(boolean patientStatus) {
-        setPatientStatus(patientStatus);
+    public UserEntity isActive(boolean isActive) {
+        setIsActive(isActive);
+        return this;
+    }
+
+    public UserEntity codeNum(String codeNum) {
+        setCodeNum(codeNum);
+        return this;
+    }
+
+    public UserEntity roles(Collection<Role> roles) {
+        setRoles(roles);
         return this;
     }
 
@@ -211,12 +261,12 @@ public class UserEntity {
             return false;
         }
         UserEntity userEntity = (UserEntity) o;
-        return Objects.equals(id, userEntity.id) && Objects.equals(firstName, userEntity.firstName) && Objects.equals(lastName, userEntity.lastName) && Objects.equals(mobile, userEntity.mobile) && Objects.equals(gender, userEntity.gender) && Objects.equals(job, userEntity.job) && Objects.equals(birthday, userEntity.birthday) && Objects.equals(userType, userEntity.userType) && Objects.equals(score, userEntity.score) && Objects.equals(socialStatus, userEntity.socialStatus) && patientStatus == userEntity.patientStatus;
+        return Objects.equals(id, userEntity.id) && Objects.equals(firstName, userEntity.firstName) && Objects.equals(lastName, userEntity.lastName) && Objects.equals(userName, userEntity.userName) && Objects.equals(password, userEntity.password) && Objects.equals(mobile, userEntity.mobile) && Objects.equals(gender, userEntity.gender) && Objects.equals(job, userEntity.job) && Objects.equals(birthday, userEntity.birthday) && Objects.equals(score, userEntity.score) && Objects.equals(socialStatus, userEntity.socialStatus) && isActive == userEntity.isActive && Objects.equals(codeNum, userEntity.codeNum) && Objects.equals(roles, userEntity.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, mobile, gender, job, birthday, userType, score, socialStatus, patientStatus);
+        return Objects.hash(id, firstName, lastName, userName, password, mobile, gender, job, birthday, score, socialStatus, isActive, codeNum, roles);
     }
 
     @Override
@@ -225,16 +275,18 @@ public class UserEntity {
             " id='" + getId() + "'" +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
+            ", userName='" + getUserName() + "'" +
+            ", password='" + getPassword() + "'" +
             ", mobile='" + getMobile() + "'" +
             ", gender='" + getGender() + "'" +
             ", job='" + getJob() + "'" +
             ", birthday='" + getBirthday() + "'" +
-            ", userType='" + getUserType() + "'" +
             ", score='" + getScore() + "'" +
             ", socialStatus='" + getSocialStatus() + "'" +
-            ", patientStatus='" + isPatientStatus() + "'" +
+            ", isActive='" + isIsActive() + "'" +
+            ", codeNum='" + getCodeNum() + "'" +
+            ", roles='" + getRoles() + "'" +
             "}";
     }
-
-
+   
 }

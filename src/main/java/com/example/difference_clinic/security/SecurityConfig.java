@@ -17,8 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 
 @Configuration
 @EnableWebSecurity
@@ -35,9 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.userDetailsService(userDetailsService).passwordEncoder(bcryptPasswordEncoder);
-        auth.parentAuthenticationManager(authenticationManagerBean())
-        .userDetailsService(userDetailsService);
+       auth.userDetailsService(userDetailsService).passwordEncoder(bcryptPasswordEncoder);
+
     }
 
     @Override

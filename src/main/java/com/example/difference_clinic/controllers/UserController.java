@@ -41,9 +41,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 
 public class UserController{
-    
+    @Autowired
     private  UserService userService;
-    private UserRepo userRepo;
+    // private UserRepo userRepo;
     public static final String APPLICATION_JSON_VALUE = "applicaion/json";
 
     

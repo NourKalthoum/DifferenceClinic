@@ -33,16 +33,15 @@ public class UserEntity {
     private Long score;
     private String socialStatus;
     private boolean patientStatus;
-    // @JsonIgnoreProperties(value = {"user"},allowSetters = true)
-    // @OneToMany(mappedBy = "user")
-    // private List<QuestionEntity> questions;
-
+    @JsonIgnoreProperties(value = {"user"},allowSetters = true)
+    @OneToMany(mappedBy = "user")
+    private List<AppointmentEntity> questions;
 
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String firstName, String lastName, String mobile, String gender, String job, Date birthday, String userType, Long score, String socialStatus, boolean patientStatus) {
+    public UserEntity(Long id, String firstName, String lastName, String mobile, String gender, String job, Date birthday, String userType, Long score, String socialStatus, boolean patientStatus, List<AppointmentEntity> questions) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,6 +53,7 @@ public class UserEntity {
         this.score = score;
         this.socialStatus = socialStatus;
         this.patientStatus = patientStatus;
+        this.questions = questions;
     }
 
     public Long getId() {
@@ -148,6 +148,14 @@ public class UserEntity {
         this.patientStatus = patientStatus;
     }
 
+    public List<AppointmentEntity> getQuestions() {
+        return this.questions;
+    }
+
+    public void setQuestions(List<AppointmentEntity> questions) {
+        this.questions = questions;
+    }
+
     public UserEntity id(Long id) {
         setId(id);
         return this;
@@ -203,6 +211,11 @@ public class UserEntity {
         return this;
     }
 
+    public UserEntity questions(List<AppointmentEntity> questions) {
+        setQuestions(questions);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -211,12 +224,12 @@ public class UserEntity {
             return false;
         }
         UserEntity userEntity = (UserEntity) o;
-        return Objects.equals(id, userEntity.id) && Objects.equals(firstName, userEntity.firstName) && Objects.equals(lastName, userEntity.lastName) && Objects.equals(mobile, userEntity.mobile) && Objects.equals(gender, userEntity.gender) && Objects.equals(job, userEntity.job) && Objects.equals(birthday, userEntity.birthday) && Objects.equals(userType, userEntity.userType) && Objects.equals(score, userEntity.score) && Objects.equals(socialStatus, userEntity.socialStatus) && patientStatus == userEntity.patientStatus;
+        return Objects.equals(id, userEntity.id) && Objects.equals(firstName, userEntity.firstName) && Objects.equals(lastName, userEntity.lastName) && Objects.equals(mobile, userEntity.mobile) && Objects.equals(gender, userEntity.gender) && Objects.equals(job, userEntity.job) && Objects.equals(birthday, userEntity.birthday) && Objects.equals(userType, userEntity.userType) && Objects.equals(score, userEntity.score) && Objects.equals(socialStatus, userEntity.socialStatus) && patientStatus == userEntity.patientStatus && Objects.equals(questions, userEntity.questions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, mobile, gender, job, birthday, userType, score, socialStatus, patientStatus);
+        return Objects.hash(id, firstName, lastName, mobile, gender, job, birthday, userType, score, socialStatus, patientStatus, questions);
     }
 
     @Override
@@ -233,8 +246,8 @@ public class UserEntity {
             ", score='" + getScore() + "'" +
             ", socialStatus='" + getSocialStatus() + "'" +
             ", patientStatus='" + isPatientStatus() + "'" +
+            ", questions='" + getQuestions() + "'" +
             "}";
     }
-
-
+   
 }

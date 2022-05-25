@@ -11,9 +11,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.springframework.data.elasticsearch.annotations.Document;
+
 @Entity
 @Table(name = "question")
-public class QuestionEntity {
+@Document(indexName = "question", type = "question", shards = 1)
+public class Question {
   
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,15 +29,21 @@ public class QuestionEntity {
     private UserEntity user;
 
 
-    public QuestionEntity() {
+    public Question() {
     }
 
-    public QuestionEntity(Long id, String questionText, String answer, boolean common, UserEntity user) {
+    public Question(Long id, String questionText, String answer, boolean common, UserEntity user) {
         this.id = id;
         this.questionText = questionText;
         this.answer = answer;
         this.common = common;
         this.user = user;
+    }
+
+    public Question(Long id, String questionText, String answer) {
+        this.id = id;
+        this.questionText = questionText;
+        this.answer = answer;
     }
 
     public Long getId() {
@@ -81,27 +90,27 @@ public class QuestionEntity {
         this.user = user;
     }
 
-    public QuestionEntity id(Long id) {
+    public Question id(Long id) {
         setId(id);
         return this;
     }
 
-    public QuestionEntity questionText(String questionText) {
+    public Question questionText(String questionText) {
         setQuestionText(questionText);
         return this;
     }
 
-    public QuestionEntity answer(String answer) {
+    public Question answer(String answer) {
         setAnswer(answer);
         return this;
     }
 
-    public QuestionEntity common(boolean common) {
+    public Question common(boolean common) {
         setCommon(common);
         return this;
     }
 
-    public QuestionEntity user(UserEntity user) {
+    public Question user(UserEntity user) {
         setUser(user);
         return this;
     }
@@ -110,10 +119,10 @@ public class QuestionEntity {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof QuestionEntity)) {
+        if (!(o instanceof Question)) {
             return false;
         }
-        QuestionEntity questionEntity = (QuestionEntity) o;
+        Question questionEntity = (Question) o;
         return Objects.equals(id, questionEntity.id) && Objects.equals(questionText, questionEntity.questionText) && Objects.equals(answer, questionEntity.answer) && common == questionEntity.common && Objects.equals(user, questionEntity.user);
     }
 

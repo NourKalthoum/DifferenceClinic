@@ -1,6 +1,11 @@
 package com.example.difference_clinic.controllers;
 
-import com.example.difference_clinic.entities.QuestionEntity;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.difference_clinic.entities.Question;
+import com.example.difference_clinic.repo.QuestionElasticRepo;
+import com.example.difference_clinic.services.Loaders;
 import com.example.difference_clinic.services.QuestionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +27,24 @@ public class QuestionController {
     
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private QuestionElasticRepo questionElasticRepo;
+
+    @Autowired
+    private Loaders loders;
+
+    // mobile
+    @PostMapping(value = "/search")
+    public List<Question> search(@RequestBody final String text) {
+        loders.loadAll();
+        List<Question> questions = questionElasticRepo.findByQuestionText(text);
+        List<Question> answers = questionElasticRepo.findByAnswer(text);
+        List<Question> collection = new ArrayList<Question>(); 
+        collection.addAll(questions);
+        collection.addAll(answers);
+        return collection;
+    }
 
     // mobile
     @GetMapping(path ="/showAllQuestionAndAnswer")
@@ -55,7 +79,7 @@ public class QuestionController {
 
     // mobile
     @PostMapping(path ="/addQuestion")
-	public Object addQuestiont(@RequestBody QuestionEntity question) { 
+	public Object addQuestiont(@RequestBody Question question) { 
           try {
             questionService.addQuestion(question);
 		return question;
@@ -76,9 +100,9 @@ public class QuestionController {
 
     // dashboard
     @PutMapping(path ="/addAnswer")
-	public Object addAnswer(@RequestParam(name = "id") Long id, @RequestBody QuestionEntity answeradded){
+	public Object addAnswer(@RequestParam(name = "id") Long id, @RequestBody Question answeradded){
         try {
-        QuestionEntity answer = questionService.getQuestion(id);
+        Question answer = questionService.getQuestion(id);
         answer.setAnswer(answeradded.getAnswer());
         answer.setCommon(answeradded.getCommon());
         questionService.addAnswer(id, answer);

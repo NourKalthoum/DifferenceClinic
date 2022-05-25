@@ -35,8 +35,7 @@ import lombok.Setter;
 @Getter
 @RequiredArgsConstructor
 @Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "email")
+        @UniqueConstraint(columnNames = "username")
 })
 public class UserEntity {
     @Id
@@ -48,10 +47,6 @@ public class UserEntity {
     @Size(max = 20)
     private String username;
 
-    @Size(max = 50)
-    @Email
-    private String email;
-
     @NotBlank
     @Size(max = 120)
     private String password;
@@ -61,9 +56,9 @@ public class UserEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private Long score;
-
+    private String socialStatus;
     private Boolean status;
-
+    private Boolean isActive;
     private String zipCode;
     @JsonIgnoreProperties(value = {"user"},allowSetters = true)
     @OneToMany(mappedBy = "user")
@@ -73,48 +68,49 @@ public class UserEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public UserEntity(String username, String email, String password) {
+    public UserEntity(String username, String password) {
         this.username = username;
-        this.email = email;
         this.password = password;
     }
 
-    public UserEntity(Long id, String username, String email, String password, Set<Role> roles, Boolean status) {
+    public UserEntity(Long id, String username, String password, Set<Role> roles, Boolean status) {
         this.id = id;
         this.username = username;
-        this.email = email;
         this.password = password;
         this.roles = roles;
         this.status = status;
 
     }
 
-    public UserEntity(String username, String email, String password, Boolean status) {
+    public UserEntity(String username, String password, Boolean status) {
         this.username = username;
-        this.email = email;
         this.password = password;
         this.status = status;
 
     }
 
 
-    public UserEntity(Long id, String firstName, String lastName, String username, String email, String password, String mobile, String gender, String job, Date birthday, Long score, Boolean status, String zipCode, List<AppointmentEntity> questions, Set<Role> roles) {
+    public UserEntity(Long id, String firstName, String lastName, String username, String password, String mobile, String gender, String job, Date birthday, Long score, String socialStatus, Boolean status, Boolean isActive, String zipCode, List<AppointmentEntity> questions, Set<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.email = email;
         this.password = password;
         this.mobile = mobile;
         this.gender = gender;
         this.job = job;
         this.birthday = birthday;
         this.score = score;
+        this.socialStatus = socialStatus;
         this.status = status;
+        this.isActive = isActive;
         this.zipCode = zipCode;
         this.questions = questions;
         this.roles = roles;
     }
+
+   
+   
    
 
 

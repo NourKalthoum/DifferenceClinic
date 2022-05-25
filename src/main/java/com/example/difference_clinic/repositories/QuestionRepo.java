@@ -2,15 +2,16 @@ package com.example.difference_clinic.repositories;
 
 import java.util.List;
 
-import com.example.difference_clinic.entities.QuestionEntity;
+import com.example.difference_clinic.entities.Question;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QuestionRepo extends JpaRepository<QuestionEntity,Long>{
+public interface QuestionRepo extends JpaRepository<Question,Long>{
 
-    public List<QuestionEntity> findAllByOrderByIdDesc();
-    public QuestionEntity findById(long id);
-    public QuestionEntity findById(int id);
+    public List<Question> findAllByOrderByIdDesc();
+    public Question findById(long id);
+    public Question findById(int id);
+    
 }

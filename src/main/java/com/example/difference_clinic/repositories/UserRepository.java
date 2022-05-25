@@ -1,5 +1,6 @@
 package com.example.difference_clinic.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.difference_clinic.entities.UserEntity;
@@ -15,7 +16,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Boolean existsByUsername(String username);
 
-    Boolean existsByEmail(String email);
+    public UserEntity findById(long id);
+    public UserEntity findById(int id);
 
+    public List<UserEntity> findAllByOrderByIdDesc();
     
 }

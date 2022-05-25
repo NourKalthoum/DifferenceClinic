@@ -12,11 +12,6 @@ public class SignupRequest {
     @Size(min = 3, max = 20)
     private String username;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
-    private String email;
-
     private Set<String> role;
 
     @NotBlank
@@ -24,6 +19,25 @@ public class SignupRequest {
     private String password;
 
     private Boolean status;
+    private Boolean isActive;
+    private String firstName;
+    private String lastName;
+    private String mobile;
+    private String gender;
+    private String job;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date birthday;
+    private Long score;
+    private String zipCode;
+    private String socialStatus;
+
+    public String getSocialStatus() {
+        return this.socialStatus;
+    }
+
+    public void setSocialStatus(String socialStatus) {
+        this.socialStatus = socialStatus;
+    }
 
     public String getFirstName() {
         return this.firstName;
@@ -31,6 +45,14 @@ public class SignupRequest {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getZipCode() {
+        return this.zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public String getLastName() {
@@ -81,15 +103,6 @@ public class SignupRequest {
         this.score = score;
     }
 
-    private String firstName;
-    private String lastName;
-    private String mobile;
-    private String gender;
-    private String job;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
-    private Long score;
-
     public Boolean isStatus() {
         return this.status;
     }
@@ -102,6 +115,18 @@ public class SignupRequest {
         this.status = status;
     }
 
+    public Boolean isIsActive() {
+        return this.isActive;
+    }
+
+    public Boolean getIsActive() {
+        return this.isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -110,13 +135,6 @@ public class SignupRequest {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getPassword() {
         return password;

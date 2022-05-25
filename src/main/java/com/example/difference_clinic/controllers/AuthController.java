@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
 
 import com.example.difference_clinic.entities.ERole;
 import com.example.difference_clinic.entities.Role;
@@ -23,6 +22,7 @@ import com.example.difference_clinic.repositories.RoleRepository;
 import com.example.difference_clinic.repositories.UserRepository;
 import com.example.difference_clinic.security.jwt.JwtUtils;
 import com.example.difference_clinic.security.services.UserDetailsImpl;
+import com.example.difference_clinic.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -58,6 +59,9 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+
+  @Autowired
+  UserService userService;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -81,7 +85,6 @@ public class AuthController {
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
         .body(new UserInfoResponse(userDetails.getId(),
             userDetails.getUsername(),
-            userDetails.getEmail(),
             roles));
 
   }
@@ -92,22 +95,19 @@ public class AuthController {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
 
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-    }
-
 // Create new user's account
     UserEntity user = new UserEntity(signUpRequest.getUsername(),
-        signUpRequest.getEmail(),
-        encoder.encode(signUpRequest.getPassword()),
-        signUpRequest.getStatus());
+        encoder.encode(signUpRequest.getPassword()));
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setMobile(signUpRequest.getMobile());
+        user.setSocialStatus(signUpRequest.getSocialStatus());
         user.setGender(signUpRequest.getGender());
         user.setJob(signUpRequest.getJob());
         user.setBirthday(signUpRequest.getBirthday());
-        user.setScore(signUpRequest.getScore());
+        user.setScore(10l);
+        user.setStatus(false);
+        user.setIsActive(false);
         String zipCode = genint(user);
         user.setZipCode(zipCode);
 
@@ -164,9 +164,11 @@ public class AuthController {
     Optional<UserEntity> user = userRepository.findByUsername(verificationRequest.getUsername());
           try {
             if(user != null){
-              if(verificationRequest.getZipCode() == user.get().getZipCode()){
+              if(verificationRequest.getZipCode().equals(user.get().getZipCode())){
                 user.get().setStatus(true);
+                user.get().setIsActive(true);
                 userRepository.save(user.get());
+               
               }
             }
 		return user;
@@ -202,7 +204,7 @@ public class AuthController {
         userRepository.save(user);
       }
     } catch (Exception e) {
-      // TODO Auto-generated catch block
+    
       e.printStackTrace();
     }
 

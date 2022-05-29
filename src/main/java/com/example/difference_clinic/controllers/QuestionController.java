@@ -11,6 +11,7 @@ import com.example.difference_clinic.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "api/v1/Question")
+@CrossOrigin("*")
 public class QuestionController {
     
     @Autowired
@@ -105,6 +107,7 @@ public class QuestionController {
         Question answer = questionService.getQuestion(id);
         answer.setAnswer(answeradded.getAnswer());
         answer.setCommon(answeradded.getCommon());
+        answer.setUser(questionService.getUser(answeradded.getUser().getUsername()));
         questionService.addAnswer(id, answer);
         return answer;
     } catch (Exception e) {

@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
@@ -105,7 +105,7 @@ public class AuthController {
         user.setGender(signUpRequest.getGender());
         user.setJob(signUpRequest.getJob());
         user.setBirthday(signUpRequest.getBirthday());
-        user.setScore(10l);
+        user.setScore(100l);
         user.setStatus(false);
         user.setIsActive(false);
         String zipCode = genint(user);
@@ -128,11 +128,12 @@ public class AuthController {
 
             break;
           case "mod":
-            Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+            Role modRole = roleRepository.findByName(ERole.ROLE_DOCTOR)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(modRole);
 
             break;
+            
           default:
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -62,7 +61,7 @@ public class UserEntity {
     private String zipCode;
     @JsonIgnoreProperties(value = {"user"},allowSetters = true)
     @OneToMany(mappedBy = "user")
-    private List<AppointmentEntity> questions;
+    private List<AppointmentEntity> appointmens;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -90,7 +89,8 @@ public class UserEntity {
     }
 
 
-    public UserEntity(Long id, String firstName, String lastName, String username, String password, String mobile, String gender, String job, Date birthday, Long score, String socialStatus, Boolean status, Boolean isActive, String zipCode, List<AppointmentEntity> questions, Set<Role> roles) {
+
+    public UserEntity(Long id, String firstName, String lastName, String username, String password, String mobile, String gender, String job, Date birthday, Long score, String socialStatus, Boolean status, Boolean isActive, String zipCode, List<AppointmentEntity> appointmens, Set<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -105,9 +105,10 @@ public class UserEntity {
         this.status = status;
         this.isActive = isActive;
         this.zipCode = zipCode;
-        this.questions = questions;
+        this.appointmens = appointmens;
         this.roles = roles;
     }
+   
 
    
    

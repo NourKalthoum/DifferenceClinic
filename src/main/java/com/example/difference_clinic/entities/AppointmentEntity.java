@@ -4,14 +4,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.sql.Time;
 
@@ -24,9 +27,12 @@ public class AppointmentEntity {
     private Long id;
     private LocalDate appointmentDate;
     private Time appointmentTime;
-    private AppointmentStatus status =AppointmentStatus.Booked;
+    private boolean status;
     private String diviceType;
-    private String bodySections;
+    @JsonIgnoreProperties(value = {"appointment"},allowSetters = true)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "appointment_section", joinColumns = @JoinColumn(name = "appointment_id"), inverseJoinColumns = @JoinColumn(name = "bodySections_id"))
+    private List<BodySectionsEntity> bodySections;
     private String note;
     @JsonIgnoreProperties(value = {"appointment"},allowSetters = true)
     @ManyToOne(targetEntity = UserEntity.class)
@@ -36,7 +42,7 @@ public class AppointmentEntity {
     public AppointmentEntity() {
     }
 
-    public AppointmentEntity(Long id, LocalDate appointmentDate, Time appointmentTime, AppointmentStatus status, String diviceType, String bodySections, String note, UserEntity user) {
+    public AppointmentEntity(Long id, LocalDate appointmentDate, Time appointmentTime, boolean status, String diviceType, List<BodySectionsEntity> bodySections, String note, UserEntity user) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
@@ -71,11 +77,15 @@ public class AppointmentEntity {
         this.appointmentTime = appointmentTime;
     }
 
-    public AppointmentStatus getStatus() {
+    public boolean isStatus() {
         return this.status;
     }
 
-    public void setStatus(AppointmentStatus status) {
+    public boolean getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -87,11 +97,11 @@ public class AppointmentEntity {
         this.diviceType = diviceType;
     }
 
-    public String getBodySections() {
+    public List<BodySectionsEntity> getBodySections() {
         return this.bodySections;
     }
 
-    public void setBodySections(String bodySections) {
+    public void setBodySections(List<BodySectionsEntity> bodySections) {
         this.bodySections = bodySections;
     }
 
@@ -126,7 +136,7 @@ public class AppointmentEntity {
         return this;
     }
 
-    public AppointmentEntity status(AppointmentStatus status) {
+    public AppointmentEntity status(boolean status) {
         setStatus(status);
         return this;
     }
@@ -136,7 +146,7 @@ public class AppointmentEntity {
         return this;
     }
 
-    public AppointmentEntity bodySections(String bodySections) {
+    public AppointmentEntity bodySections(List<BodySectionsEntity> bodySections) {
         setBodySections(bodySections);
         return this;
     }
@@ -159,7 +169,7 @@ public class AppointmentEntity {
             return false;
         }
         AppointmentEntity appointmentEntity = (AppointmentEntity) o;
-        return Objects.equals(id, appointmentEntity.id) && Objects.equals(appointmentDate, appointmentEntity.appointmentDate) && Objects.equals(appointmentTime, appointmentEntity.appointmentTime) && Objects.equals(status, appointmentEntity.status) && Objects.equals(diviceType, appointmentEntity.diviceType) && Objects.equals(bodySections, appointmentEntity.bodySections) && Objects.equals(note, appointmentEntity.note) && Objects.equals(user, appointmentEntity.user);
+        return Objects.equals(id, appointmentEntity.id) && Objects.equals(appointmentDate, appointmentEntity.appointmentDate) && Objects.equals(appointmentTime, appointmentEntity.appointmentTime) && status == appointmentEntity.status && Objects.equals(diviceType, appointmentEntity.diviceType) && Objects.equals(bodySections, appointmentEntity.bodySections) && Objects.equals(note, appointmentEntity.note) && Objects.equals(user, appointmentEntity.user);
     }
 
     @Override
@@ -173,7 +183,7 @@ public class AppointmentEntity {
             " id='" + getId() + "'" +
             ", appointmentDate='" + getAppointmentDate() + "'" +
             ", appointmentTime='" + getAppointmentTime() + "'" +
-            ", status='" + getStatus() + "'" +
+            ", status='" + isStatus() + "'" +
             ", diviceType='" + getDiviceType() + "'" +
             ", bodySections='" + getBodySections() + "'" +
             ", note='" + getNote() + "'" +

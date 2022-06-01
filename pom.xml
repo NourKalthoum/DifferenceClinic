@@ -17,6 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<property name="hibernate.enable_lazy_load_no_trans">true</property>
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
@@ -73,6 +74,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
 
 		<!-- elastic  -->
 		<dependency>

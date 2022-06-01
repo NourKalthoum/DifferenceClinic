@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,13 +31,15 @@ public class AppointmentEntity {
     private Time appointmentTime;
     private boolean status;
     private String diviceType;
+
     @JsonIgnoreProperties(value = {"appointment"},allowSetters = true)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "appointment_section", joinColumns = @JoinColumn(name = "appointment_id"), inverseJoinColumns = @JoinColumn(name = "bodySections_id"))
     private List<BodySectionsEntity> bodySections;
     private String note;
-    @JsonIgnoreProperties(value = {"appointment"},allowSetters = true)
-    @ManyToOne(targetEntity = UserEntity.class)
+
+    @JsonIgnoreProperties(value = {"appointment","question"},allowSetters = true)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private UserEntity user;
 
 
@@ -121,6 +125,7 @@ public class AppointmentEntity {
         this.user = user;
     }
 
+
     public AppointmentEntity id(Long id) {
         setId(id);
         return this;
@@ -190,5 +195,6 @@ public class AppointmentEntity {
             ", user='" + getUser() + "'" +
             "}";
     }
+
 
 }

@@ -106,6 +106,7 @@ public class AuthController {
         user.setJob(signUpRequest.getJob());
         user.setBirthday(signUpRequest.getBirthday());
         user.setScore(100l);
+        // user.setScore(signUpRequest.getScore());
         user.setStatus(false);
         user.setIsActive(false);
         String zipCode = genint(user);

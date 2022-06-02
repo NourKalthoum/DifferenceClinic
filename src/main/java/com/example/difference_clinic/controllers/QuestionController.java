@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.difference_clinic.entities.Question;
+import com.example.difference_clinic.payload.request.TextRequest;
 import com.example.difference_clinic.repo.QuestionElasticRepo;
 import com.example.difference_clinic.services.Loaders;
 import com.example.difference_clinic.services.QuestionService;
@@ -38,10 +39,10 @@ public class QuestionController {
 
     // mobile
     @PostMapping(value = "/search")
-    public List<Question> search(@RequestBody final String text) {
+    public List<Question> search(@RequestBody TextRequest textRequest) {
         loders.loadAll();
-        List<Question> questions = questionElasticRepo.findByQuestionText(text);
-        List<Question> answers = questionElasticRepo.findByAnswer(text);
+        List<Question> questions = questionElasticRepo.findByQuestionText(textRequest.getText());
+        List<Question> answers = questionElasticRepo.findByAnswer(textRequest.getText());
         List<Question> collection = new ArrayList<Question>(); 
         collection.addAll(questions);
         collection.addAll(answers);

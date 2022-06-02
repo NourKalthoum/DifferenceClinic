@@ -1,5 +1,6 @@
 package com.example.difference_clinic.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.difference_clinic.entities.UserEntity;
@@ -12,4 +13,5 @@ public interface UserRepo extends JpaRepository<UserEntity,Long>{
     UserEntity findByUsername(String username);
      Optional<UserEntity> findById(long id);
     Optional<UserEntity> findById(int id);
+    public List<UserEntity> findTop10ByOrderByScoreDesc();
 }

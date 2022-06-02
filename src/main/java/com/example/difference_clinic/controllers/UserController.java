@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
    
     @Autowired
@@ -31,15 +31,15 @@ public class UserController {
     
     // mobile
     @PutMapping(path ="/updateProfile")
-    public Object updateProfile(@RequestParam(name = "id") Long id, @RequestBody UserEntity user){
+    public Object updateProfile(@RequestBody UserEntity user){
         try {
-        UserEntity updateUser= userService.getUser(id);
+        UserEntity updateUser= userService.getUser(user.getId());
         updateUser.setFirstName(user.getFirstName());
         updateUser.setLastName(user.getLastName());
         updateUser.setJob(user.getJob());
         updateUser.setSocialStatus(user.getSocialStatus());
         updateUser.setMobile(user.getMobile());
-        userService.updateUser(id, updateUser);
+        userService.updateUser(user.getId(), updateUser);
         return updateUser;
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -83,4 +83,14 @@ public class UserController {
     {
         return userService.deleteUser(id);
     }
+
+     // dashboard
+     @GetMapping(path ="/showVip")
+     public Object showVip(){
+         try {
+             return userService.showVip();
+         } catch (Exception e) {
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+         }
+     }
 }

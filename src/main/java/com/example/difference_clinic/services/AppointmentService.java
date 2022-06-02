@@ -66,7 +66,7 @@ public class AppointmentService {
         //     System.out.println(time);
         // }
         List<AppointmentEntity> appointmentinDay = appointmentRepo
-                .getAppointmentEntityByAppointmentDate(appointmentDate);
+                .getAppointmentEntityByAppointmentDateOrderByAppointmentTime(appointmentDate);
 
         List<Time> booked = new ArrayList<>(25);
         for (int i = 0; i < appointmentinDay.size(); i++) {
@@ -81,6 +81,47 @@ public class AppointmentService {
         }
 
         return avaliables;
+    }
+
+    public List<AppointmentEntity> ShowAppointmentOfNowDay() {
+
+        LocalDate appointmentDate = LocalDate.now();
+        List<AppointmentEntity> appointmentinDay = appointmentRepo
+                .getAppointmentEntityByAppointmentDateOrderByAppointmentTime(appointmentDate);
+
+      return appointmentinDay;
+    }
+
+    public List<AppointmentEntity> ShowAppointmentOfDay(LocalDate appointmentDate) {
+
+        List<AppointmentEntity> appointmentinDay = appointmentRepo
+        .getAppointmentEntityByAppointmentDateOrderByAppointmentTime(appointmentDate);
+
+      return appointmentinDay;
+    }
+
+    public boolean missed(Long id){
+
+        Optional<AppointmentEntity> appointment = appointmentRepo.findById(id);
+        appointment.get().getUser().setScore(appointment.get().getUser().getScore() - 20);
+         appointmentRepo.save(appointment.get());
+        return true;
+    }
+ 
+    public List<AppointmentEntity> ShowAppointmentofUser(Long id){
+
+       Optional<UserEntity> user = userRepo.findById(id);
+       List<AppointmentEntity> appointments = user.get().getAppointmens();
+       return appointments;
+
+    }
+
+    public boolean deleteAppointment(Long id)
+    {   Optional<AppointmentEntity> appointment = appointmentRepo.findById(id);
+        appointment.get().getUser().setScore(appointment.get().getUser().getScore() + 5);
+        appointmentRepo.save(appointment.get());
+        appointmentRepo.delete(appointmentRepo.findById(id).orElseThrow());
+        return appointmentRepo.findById(id).isEmpty();
     }
 
 }

@@ -76,5 +76,13 @@ public class UserService {
         userRepo.delete(userRepo.findById(id).orElseThrow());
         return userRepo.findById(id).isEmpty();
     }
+
+	public List<UserEntity> showVip(){
+        
+		List<UserEntity> users = userRepository.findTop10ByOrderByScoreDesc();
+		
+		
+		return users;
+	}
     
 }

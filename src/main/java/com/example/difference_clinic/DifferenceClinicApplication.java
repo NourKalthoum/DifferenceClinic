@@ -10,4 +10,5 @@ public class DifferenceClinicApplication {
  public static void main(String[] args) {
   SpringApplication.run(DifferenceClinicApplication.class, args);
  }
+ 
 }

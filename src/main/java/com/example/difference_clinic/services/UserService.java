@@ -2,7 +2,6 @@ package com.example.difference_clinic.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.example.difference_clinic.entities.UserEntity;
 import com.example.difference_clinic.repositories.UserRepo;

@@ -1,16 +1,13 @@
 package com.example.difference_clinic.controllers;
-import java.sql.Time;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import com.example.difference_clinic.entities.AppointmentEntity;
 import com.example.difference_clinic.services.AppointmentService;
-import com.example.difference_clinic.services.UserService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
+// import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/v1/Appointment")
 public class AppointmentController {
 
-    private static final ISO DATE = null;
+    // private static final ISO DATE = null;
 
     @Autowired
     AppointmentService appointmentService;

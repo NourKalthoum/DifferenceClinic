@@ -1,9 +1,5 @@
 package com.example.difference_clinic.security;
 
-import com.example.difference_clinic.security.jwt.AuthEntryPointJwt;
-import com.example.difference_clinic.security.jwt.AuthTokenFilter;
-import com.example.difference_clinic.security.services.UserDetailsServiceImpl;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.difference_clinic.security.jwt.AuthEntryPointJwt;
+import com.example.difference_clinic.security.jwt.AuthTokenFilter;
+import com.example.difference_clinic.security.services.UserDetailsServiceImpl;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -25,9 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     // jsr250Enabled = true,
     prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-  private final String[] PUBLIC_ENDPOINTS ={"/api/**"};
-
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
@@ -60,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.cors().and().csrf().disable()
       .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-      .authorizeRequests().antMatchers(PUBLIC_ENDPOINTS).permitAll()
+      .authorizeRequests().antMatchers("/api/**").permitAll()
+      .antMatchers("/api/test/**").permitAll()
       .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

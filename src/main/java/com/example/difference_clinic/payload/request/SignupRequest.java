@@ -17,6 +17,15 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 400)
     private String password;
+    private String email;
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     private Boolean status;
     private Boolean isActive;

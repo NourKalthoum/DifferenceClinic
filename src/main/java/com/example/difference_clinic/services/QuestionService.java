@@ -2,13 +2,11 @@ package com.example.difference_clinic.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.example.difference_clinic.entities.Question;
 import com.example.difference_clinic.entities.UserEntity;
 import com.example.difference_clinic.repositories.QuestionRepo;
 import com.example.difference_clinic.repositories.UserRepo;
-import com.example.difference_clinic.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

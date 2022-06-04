@@ -1,9 +1,6 @@
 package com.example.difference_clinic.controllers;
 
-import java.util.Optional;
-
 import com.example.difference_clinic.entities.UserEntity;
-import com.example.difference_clinic.payload.response.MessageResponse;
 import com.example.difference_clinic.repositories.UserRepository;
 import com.example.difference_clinic.services.UserService;
 

@@ -29,7 +29,7 @@ public class Loaders {
     @PostConstruct
     @Transactional
     public void loadAll(){
-
+        questionElasticRepo.deleteAll();
         operations.putMapping(Question.class);
         System.out.println("Loading Data");
         List<Question> questionList = questionRepo.findAll(); //Get from DB

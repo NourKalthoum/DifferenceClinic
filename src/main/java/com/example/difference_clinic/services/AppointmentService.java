@@ -5,13 +5,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 import com.example.difference_clinic.entities.AppointmentEntity;
 import com.example.difference_clinic.entities.UserEntity;
 import com.example.difference_clinic.repositories.AppointmentRepo;
-import com.example.difference_clinic.repositories.BodySectionsRepo;
 import com.example.difference_clinic.repositories.UserRepo;
 import com.example.difference_clinic.repositories.UserRepository;
 
@@ -23,9 +21,6 @@ public class AppointmentService {
 
     @Autowired
     private AppointmentRepo appointmentRepo;
-
-    @Autowired
-    private BodySectionsRepo bodySectionsRepo;
 
     @Autowired
     private UserRepository userRepository;

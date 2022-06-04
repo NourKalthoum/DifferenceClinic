@@ -2,8 +2,6 @@ package com.example.difference_clinic.payload.response;
 
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-
 public class UserInfoResponse {
 	private Long id;
 	private String username;

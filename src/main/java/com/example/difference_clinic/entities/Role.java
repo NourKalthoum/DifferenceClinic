@@ -20,6 +20,11 @@ public class Role {
   @Column(length = 20)
   private ERole name;
 
+    public Role(Integer id, ERole name) {
+        this.id = id;
+        this.name = name;
+    }
+
   public Role() {
 
   }

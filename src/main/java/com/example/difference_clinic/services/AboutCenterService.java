@@ -17,6 +17,10 @@ public class AboutCenterService {
 		return aboutCenterRepo.findById(1);
 	}
 
+	public AboutCenterEntity addAboutCenter(AboutCenterEntity aboutCenterEntity){
+		return aboutCenterRepo.save(aboutCenterEntity);
+	}
+
 	public AboutCenterEntity updateAboutCenter(int id, AboutCenterEntity aboutCenterEntity) {
 		try {
 			return aboutCenterRepo.save(aboutCenterEntity);

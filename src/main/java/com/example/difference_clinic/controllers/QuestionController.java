@@ -79,17 +79,6 @@ public class QuestionController {
         }
     }
 
-    // mobile
-    @PostMapping(path ="/addQuestion")
-	public Object addQuestiont(@RequestBody Question question) { 
-          try {
-            questionService.addQuestion(question);
-		return question;
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-	}
-
      // dashboard
      @GetMapping(path ="/showAllQuestion")
      public Object showAllQuestion(){

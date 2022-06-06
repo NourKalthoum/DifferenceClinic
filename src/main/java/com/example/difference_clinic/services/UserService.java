@@ -3,11 +3,14 @@ package com.example.difference_clinic.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.difference_clinic.entities.Role;
 import com.example.difference_clinic.entities.UserEntity;
+import com.example.difference_clinic.repositories.RoleRepository;
 import com.example.difference_clinic.repositories.UserRepo;
 import com.example.difference_clinic.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +21,10 @@ public class UserService {
 
     @Autowired
     private UserRepo userRepository;
+
+	private  PasswordEncoder passwordEncoder;
+    @Autowired
+	RoleRepository roleRepository;
 
     public UserEntity getUser(long id) {
 		
@@ -83,5 +90,19 @@ public class UserService {
 		
 		return users;
 	}
+
+	public UserEntity saveUser(UserEntity user){
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(user);
+	}
+
+	public void addRoleToUser(String username, String roleName) {
+        UserEntity user = userRepository.findByUsername(username);
+        Role role = roleRepository.findByName(roleName);
+        user.getRoles().add(role);
+    }
     
+	public Role saveRole(Role role) {
+        return roleRepository.save(role);
+    }
 }

@@ -7,14 +7,19 @@ public class VerificationRequest {
     @NotBlank
 	private String username;
 
+    @NotBlank
+	private String password; 
+
 	@NotBlank
     private String zipCode;
+
 
     public VerificationRequest() {
     }
 
-    public VerificationRequest(String username, String zipCode) {
+    public VerificationRequest(String username, String password, String zipCode) {
         this.username = username;
+        this.password = password;
         this.zipCode = zipCode;
     }
 
@@ -24,6 +29,14 @@ public class VerificationRequest {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getZipCode() {
@@ -36,6 +49,11 @@ public class VerificationRequest {
 
     public VerificationRequest username(String username) {
         setUsername(username);
+        return this;
+    }
+
+    public VerificationRequest password(String password) {
+        setPassword(password);
         return this;
     }
 
@@ -52,20 +70,21 @@ public class VerificationRequest {
             return false;
         }
         VerificationRequest verificationRequest = (VerificationRequest) o;
-        return Objects.equals(username, verificationRequest.username) && Objects.equals(zipCode, verificationRequest.zipCode);
+        return Objects.equals(username, verificationRequest.username) && Objects.equals(password, verificationRequest.password) && Objects.equals(zipCode, verificationRequest.zipCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, zipCode);
+        return Objects.hash(username, password, zipCode);
     }
 
     @Override
     public String toString() {
         return "{" +
             " username='" + getUsername() + "'" +
+            ", password='" + getPassword() + "'" +
             ", zipCode='" + getZipCode() + "'" +
             "}";
     }
-
+   
 }

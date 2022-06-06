@@ -8,6 +8,7 @@ import com.example.difference_clinic.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@CrossOrigin("*")
 public class UserController {
    
     @Autowired
@@ -79,6 +81,16 @@ public class UserController {
     public boolean deleteUser(@RequestParam(name = "id") Long id)    
     {
         return userService.deleteUser(id);
+    }
+
+    // mobile
+    @GetMapping(path ="/showUser")
+    public Object showUser(@RequestParam(name = "username")String username){
+        try {
+            return userService.getUsername(username);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
      // dashboard

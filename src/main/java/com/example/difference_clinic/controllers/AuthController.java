@@ -1,6 +1,5 @@
 package com.example.difference_clinic.controllers;
 
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +15,11 @@ import com.example.difference_clinic.entities.UserEntity;
 import com.example.difference_clinic.payload.request.LoginRequest;
 import com.example.difference_clinic.payload.request.SignupRequest;
 import com.example.difference_clinic.payload.request.VerificationRequest;
+import com.example.difference_clinic.payload.response.FullResponse;
 import com.example.difference_clinic.payload.response.JwtResponse;
 import com.example.difference_clinic.payload.response.MessageResponse;
 import com.example.difference_clinic.repositories.RoleRepository;
+import com.example.difference_clinic.repositories.UserRepo;
 import com.example.difference_clinic.repositories.UserRepository;
 import com.example.difference_clinic.security.jwt.JwtUtils;
 import com.example.difference_clinic.security.services.UserDetailsImpl;
@@ -38,10 +39,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1")
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
@@ -49,6 +49,8 @@ public class AuthController {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  UserRepo userRepo;
   @Autowired
   RoleRepository roleRepository;
 
@@ -61,25 +63,45 @@ public class AuthController {
   @Autowired
   UserService userService;
 
+
+
   @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+  public Object authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    try {
+      Authentication authentication = authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+          
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      String jwt = jwtUtils.generateJwtToken(authentication);
 
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      List<String> roles = userDetails.getAuthorities().stream()
+          .map(item -> item.getAuthority())
+          .collect(Collectors.toList());
+      UserEntity userEntity = new UserEntity();
+      userEntity = userRepo.findByUsername(userDetails.getUsername());
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    String jwt = jwtUtils.generateJwtToken(authentication);
-
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-    List<String> roles = userDetails.getAuthorities().stream()
-        .map(item -> item.getAuthority())
-        .collect(Collectors.toList());
-
-
-    return ResponseEntity.ok(new JwtResponse(jwt,
-        userDetails.getId(),
-        userDetails.getUsername(),
-        roles));
+      FullResponse fullResponse = new FullResponse();
+      fullResponse.setId(userDetails.getId());
+      fullResponse.setUsername(userDetails.getUsername());
+      fullResponse.setToken(jwt);
+      fullResponse.setRoles(roles);
+      fullResponse.setFirstName(userEntity.getFirstName());
+      fullResponse.setLastName(userEntity.getLastName());
+      fullResponse.setPassword(userEntity.getPassword());
+      fullResponse.setBirthday(userEntity.getBirthday());
+      fullResponse.setGender(userEntity.getGender());
+      fullResponse.setSocialStatus(userEntity.getSocialStatus());
+      fullResponse.setMobile(userEntity.getMobile());
+      fullResponse.setIsActive(userEntity.getIsActive());
+      fullResponse.setScore(userEntity.getScore());
+      fullResponse.setStatus(userEntity.getStatus());
+      fullResponse.setZipCode(userEntity.getZipCode());
+      fullResponse.setJob(userEntity.getJob());
+      return fullResponse;
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Username or Password is not true");
+    }
   }
 
   @PostMapping("/signup")
@@ -139,30 +161,63 @@ public class AuthController {
     user.setRoles(roles);
     userRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("Please enter a code number to evaluate the completion of the registration process "));
+    return ResponseEntity
+        .ok(new MessageResponse("Please enter a code number to evaluate the completion of the registration process "));
   }
 
-  @PostMapping(path ="/verification")
-	public Object verification(@RequestBody VerificationRequest verificationRequest) { 
+  @PostMapping(path = "/verification")
+  public Object verification(@RequestBody VerificationRequest verificationRequest) {
     Optional<UserEntity> user = userRepository.findByUsername(verificationRequest.getUsername());
-          try {
-            if(user != null){
-              System.out.println("-------------------1-------------------------------------");
-              if(verificationRequest.getZipCode().equals(user.get().getZipCode())){
-                System.out.println(verificationRequest.getZipCode());
-                System.out.println("-------------------2-----------------------------------");
-                System.out.println(user.get().getZipCode());
-                user.get().setStatus(true);
-                user.get().setIsActive(true);
-                userRepository.save(user.get());
-               
-              }
-            }
-		return user;
+    
+    try {
+      if (user == null) {
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Username not Found"));
+      }
+      if (verificationRequest.getZipCode().equals(user.get().getZipCode()) == false) {
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Code is not true"));
+      }
+      boolean isMatch = encoder.matches(verificationRequest.getPassword(), user.get().getPassword());
+      if(isMatch == false){
+        return ResponseEntity.badRequest().body(new MessageResponse("Error: Password not match"));
+      }
+      user.get().setStatus(true);
+      user.get().setIsActive(true);
+      userRepository.save(user.get());
+      Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(user.get().getUsername(), verificationRequest.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    List<String> roles = userDetails.getAuthorities().stream()
+        .map(item -> item.getAuthority())
+        .collect(Collectors.toList());
+    UserEntity userEntity = new UserEntity();
+    userEntity = userRepo.findByUsername(userDetails.getUsername());
+
+    FullResponse fullResponse = new FullResponse();
+    fullResponse.setId(userDetails.getId());
+    fullResponse.setUsername(userDetails.getUsername());
+    fullResponse.setToken(jwt);
+    fullResponse.setRoles(roles);
+    fullResponse.setFirstName(userEntity.getFirstName());
+    fullResponse.setLastName(userEntity.getLastName());
+    fullResponse.setPassword(userEntity.getPassword());
+    fullResponse.setBirthday(userEntity.getBirthday());
+    fullResponse.setGender(userEntity.getGender());
+    fullResponse.setSocialStatus(userEntity.getSocialStatus());
+    fullResponse.setMobile(userEntity.getMobile());
+    fullResponse.setIsActive(userEntity.getIsActive());
+    fullResponse.setScore(userEntity.getScore());
+    fullResponse.setStatus(userEntity.getStatus());
+    fullResponse.setZipCode(userEntity.getZipCode());
+    fullResponse.setJob(userEntity.getJob());
+    return fullResponse;
     } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
-	}
+  }
 
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -186,7 +241,7 @@ public class AuthController {
         userRepository.save(user);
       }
     } catch (Exception e) {
-    
+
       e.printStackTrace();
     }
 
@@ -200,14 +255,4 @@ public class AuthController {
 
   }
 
-  // @Data
-  // @Setter
-  // @Getter
-  // class RoleToUserForm {
-
-  //   private String username;
-  //   private String roleName;
-
-  // }
 }
-

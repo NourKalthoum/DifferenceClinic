@@ -8,8 +8,10 @@ import java.sql.Time;
 import java.time.LocalDate;
 
 import com.example.difference_clinic.entities.AppointmentEntity;
+import com.example.difference_clinic.entities.BodySectionsEntity;
 import com.example.difference_clinic.entities.UserEntity;
 import com.example.difference_clinic.repositories.AppointmentRepo;
+import com.example.difference_clinic.repositories.BodySectionsRepo;
 import com.example.difference_clinic.repositories.UserRepo;
 import com.example.difference_clinic.repositories.UserRepository;
 
@@ -27,6 +29,9 @@ public class AppointmentService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private BodySectionsRepo bodySectionsRepo;
 
     public AppointmentEntity createAppointment(AppointmentEntity appointment) throws Exception {
         UserEntity user = userRepo.findByUsername(appointment.getUser().getUsername());
@@ -98,6 +103,7 @@ public class AppointmentService {
     public boolean missed(Long id){
 
         Optional<AppointmentEntity> appointment = appointmentRepo.findById(id);
+        appointment.get().setAttendCheck(true);
         appointment.get().getUser().setScore(appointment.get().getUser().getScore() - 20);
          appointmentRepo.save(appointment.get());
         return true;
@@ -119,4 +125,7 @@ public class AppointmentService {
         return appointmentRepo.findById(id).isEmpty();
     }
 
+    public BodySectionsEntity addSection(BodySectionsEntity bodySectionsEntity){
+     return bodySectionsRepo.save(bodySectionsEntity);
+    }
 }

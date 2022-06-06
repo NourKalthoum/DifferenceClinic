@@ -88,6 +88,15 @@ public class UserEntity {
 
     }
 
+    public UserEntity(Long id,String username, String password,String firstName, String lastName) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+
+    }
+
 
 
     public UserEntity(Long id, String firstName, String lastName, String username, String password, String mobile, String gender, String job, Date birthday, Long score, String socialStatus, Boolean status, Boolean isActive, String zipCode, List<AppointmentEntity> appointmens, Set<Role> roles) {

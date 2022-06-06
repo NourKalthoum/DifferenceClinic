@@ -26,6 +26,7 @@ public class AppointmentEntity {
     private LocalDate appointmentDate;
     private Time appointmentTime;
     private String diviceType;
+    private boolean attendCheck = false;
 
     @JsonIgnoreProperties(value = {"appointment"},allowSetters = true)
     @ManyToMany(fetch = FetchType.LAZY)
@@ -41,11 +42,12 @@ public class AppointmentEntity {
     public AppointmentEntity() {
     }
 
-    public AppointmentEntity(Long id, LocalDate appointmentDate, Time appointmentTime, String diviceType, List<BodySectionsEntity> bodySections, String note, UserEntity user) {
+    public AppointmentEntity(Long id, LocalDate appointmentDate, Time appointmentTime, String diviceType, boolean attendCheck, List<BodySectionsEntity> bodySections, String note, UserEntity user) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.diviceType = diviceType;
+        this.attendCheck = attendCheck;
         this.bodySections = bodySections;
         this.note = note;
         this.user = user;
@@ -81,6 +83,18 @@ public class AppointmentEntity {
 
     public void setDiviceType(String diviceType) {
         this.diviceType = diviceType;
+    }
+
+    public boolean isAttendCheck() {
+        return this.attendCheck;
+    }
+
+    public boolean getAttendCheck() {
+        return this.attendCheck;
+    }
+
+    public void setAttendCheck(boolean attendCheck) {
+        this.attendCheck = attendCheck;
     }
 
     public List<BodySectionsEntity> getBodySections() {
@@ -127,6 +141,11 @@ public class AppointmentEntity {
         return this;
     }
 
+    public AppointmentEntity attendCheck(boolean attendCheck) {
+        setAttendCheck(attendCheck);
+        return this;
+    }
+
     public AppointmentEntity bodySections(List<BodySectionsEntity> bodySections) {
         setBodySections(bodySections);
         return this;
@@ -150,12 +169,12 @@ public class AppointmentEntity {
             return false;
         }
         AppointmentEntity appointmentEntity = (AppointmentEntity) o;
-        return Objects.equals(id, appointmentEntity.id) && Objects.equals(appointmentDate, appointmentEntity.appointmentDate) && Objects.equals(appointmentTime, appointmentEntity.appointmentTime) && Objects.equals(diviceType, appointmentEntity.diviceType) && Objects.equals(bodySections, appointmentEntity.bodySections) && Objects.equals(note, appointmentEntity.note) && Objects.equals(user, appointmentEntity.user);
+        return Objects.equals(id, appointmentEntity.id) && Objects.equals(appointmentDate, appointmentEntity.appointmentDate) && Objects.equals(appointmentTime, appointmentEntity.appointmentTime) && Objects.equals(diviceType, appointmentEntity.diviceType) && attendCheck == appointmentEntity.attendCheck && Objects.equals(bodySections, appointmentEntity.bodySections) && Objects.equals(note, appointmentEntity.note) && Objects.equals(user, appointmentEntity.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, appointmentDate, appointmentTime, diviceType, bodySections, note, user);
+        return Objects.hash(id, appointmentDate, appointmentTime, diviceType, attendCheck, bodySections, note, user);
     }
 
     @Override
@@ -165,11 +184,11 @@ public class AppointmentEntity {
             ", appointmentDate='" + getAppointmentDate() + "'" +
             ", appointmentTime='" + getAppointmentTime() + "'" +
             ", diviceType='" + getDiviceType() + "'" +
+            ", attendCheck='" + isAttendCheck() + "'" +
             ", bodySections='" + getBodySections() + "'" +
             ", note='" + getNote() + "'" +
             ", user='" + getUser() + "'" +
             "}";
     }
-
 
 }

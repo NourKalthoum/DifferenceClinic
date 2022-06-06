@@ -1,12 +1,15 @@
 package com.example.difference_clinic.controllers;
 import java.time.LocalDate;
 import com.example.difference_clinic.entities.AppointmentEntity;
+import com.example.difference_clinic.entities.Question;
 import com.example.difference_clinic.services.AppointmentService;
+import com.example.difference_clinic.services.QuestionService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 // import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "api/v1/Appointment")
+@RequestMapping(path = "api/auth")
+@CrossOrigin("*")
 public class AppointmentController {
 
     // private static final ISO DATE = null;
 
+    @Autowired
+    private QuestionService questionService;
+    
     @Autowired
     AppointmentService appointmentService;
     
@@ -97,4 +104,14 @@ public class AppointmentController {
         return appointmentService.deleteAppointment(id);
     }
 
+    // mobile
+    @PostMapping(path ="/addQuestion")
+	public Object addQuestiont(@RequestBody Question question) { 
+          try {
+            questionService.addQuestion(question);
+		return question;
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+	}
 }

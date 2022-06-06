@@ -31,14 +31,28 @@ public class DifferenceClinicApplication {
             userService.saveRole(new Role(3, ERole.ROLE_SECRTERA));
             userService.saveRole(new Role(4, ERole.ROLE_ADMIN));
 
-            // userService.saveUser(new UserEntity(1l,"هبة", "123456789", "هبة", "الحمصي"));
-
-            // userService.addRoleToUser("هبة", "ROLE_ADMIN");
-
-            // appointmentService.addSection(new BodySectionsEntity(1l,"يد"));
-
-
-            // aboutCenterService.addAboutCenter(new AboutCenterEntity(1l,"مركز دفرنس كلينك تم أنشاءه من 5سنوات جميع الاجهزة مستوردة من الخارج وباحدث التقنيات ","يقدم المركز العديد من الخدمات منها خدمات ازالة الشعر بالليزر بتقنيات متعددة ويقدم العديد من منتجات العناية بالبشرة وباجود الماركات العالمية والكثير من عمليات التجميل التي يقدمها اخصائيين جراحة "));
+            appointmentService.addSection(new BodySectionsEntity(1l,"وجه"));
+            appointmentService.addSection(new BodySectionsEntity(2l,"سوالف"));
+            appointmentService.addSection(new BodySectionsEntity(3l,"ذقن"));
+            appointmentService.addSection(new BodySectionsEntity(4l,"رقبة"));
+            appointmentService.addSection(new BodySectionsEntity(5l,"بطن"));
+            appointmentService.addSection(new BodySectionsEntity(6l,"الابطين"));
+            appointmentService.addSection(new BodySectionsEntity(7l,"ظهر"));
+            appointmentService.addSection(new BodySectionsEntity(8l,"اسفل الظهر"));
+            appointmentService.addSection(new BodySectionsEntity(9l,"صدر"));
+            appointmentService.addSection(new BodySectionsEntity(10l,"الزندين"));
+            appointmentService.addSection(new BodySectionsEntity(11l,"الساعدين"));
+            appointmentService.addSection(new BodySectionsEntity(12l,"بيكيني"));
+            appointmentService.addSection(new BodySectionsEntity(13l,"الديريير"));
+            appointmentService.addSection(new BodySectionsEntity(14l,"فخذين"));
+            appointmentService.addSection(new BodySectionsEntity(15l,"ساقين"));
+            appointmentService.addSection(new BodySectionsEntity(16l,"مشط القدم"));
+            appointmentService.addSection(new BodySectionsEntity(17l,"الاصابع"));
+            appointmentService.addSection(new BodySectionsEntity(18l,"شارب"));
+            appointmentService.addSection(new BodySectionsEntity(19l,"جسم كامل"));
+            
+            
+            aboutCenterService.addAboutCenter(new AboutCenterEntity(1l,"مركز دفرنس كلينك تم أنشاءه من سنتين جميع الاجهزة مستوردة من الخارج وباحدث التقنيات ","يقدم المركز العديد من الخدمات منها خدمات ازالة الشعر بالليزر بتقنيات متعددة ويقدم العديد من منتجات العناية بالبشرة وباجود الماركات العالمية والكثير من عمليات التجميل التي يقدمها اخصائيين جراحة "));
 
         };
     }

@@ -28,22 +28,7 @@ public class UserController {
     @Autowired
     UserService userService;
     
-    // mobile
-    @PutMapping(path ="/updateProfile")
-    public Object updateProfile(@RequestBody UserEntity user){
-        try {
-        UserEntity updateUser= userService.getUser(user.getId());
-        updateUser.setFirstName(user.getFirstName());
-        updateUser.setLastName(user.getLastName());
-        updateUser.setJob(user.getJob());
-        updateUser.setSocialStatus(user.getSocialStatus());
-        updateUser.setMobile(user.getMobile());
-        userService.updateUser(user.getId(), updateUser);
-        return updateUser;
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-    }
+   
     // dashboard
     @GetMapping(path ="/showAllUsers")
     public Object showAllUsers(){
@@ -81,16 +66,6 @@ public class UserController {
     public boolean deleteUser(@RequestParam(name = "id") Long id)    
     {
         return userService.deleteUser(id);
-    }
-
-    // mobile
-    @GetMapping(path ="/showUser")
-    public Object showUser(@RequestParam(name = "username")String username){
-        try {
-            return userService.getUsername(username);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
     }
 
      // dashboard

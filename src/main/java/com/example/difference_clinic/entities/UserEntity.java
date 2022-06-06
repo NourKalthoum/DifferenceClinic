@@ -88,8 +88,8 @@ public class UserEntity {
 
     }
 
-    public UserEntity(Long id,String username, String password,String firstName, String lastName) {
-        this.id = id;
+    public UserEntity(String username, String password,String firstName, String lastName) {
+        
         this.username = username;
         this.password = password;
         this.firstName = firstName;

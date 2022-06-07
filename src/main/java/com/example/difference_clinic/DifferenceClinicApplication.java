@@ -4,7 +4,6 @@ import com.example.difference_clinic.entities.AboutCenterEntity;
 import com.example.difference_clinic.entities.BodySectionsEntity;
 import com.example.difference_clinic.entities.ERole;
 import com.example.difference_clinic.entities.Role;
-import com.example.difference_clinic.entities.UserEntity;
 import com.example.difference_clinic.services.AboutCenterService;
 import com.example.difference_clinic.services.AppointmentService;
 import com.example.difference_clinic.services.UserService;

@@ -14,11 +14,15 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
    private Long id;
    private String fileName;
-    
+
 
     public Image() {
     }
 
+    public Image(String fileName) {
+       
+        this.fileName = fileName;
+    }
     public Image(Long id, String fileName) {
         this.id = id;
         this.fileName = fileName;

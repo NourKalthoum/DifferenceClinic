@@ -1,7 +1,20 @@
 package com.example.difference_clinic.controllers;
 
+import com.example.difference_clinic.entities.Image;
 import com.example.difference_clinic.entities.ProductEntity;
+import com.example.difference_clinic.payload.request.ProductRequest;
+import com.example.difference_clinic.repositories.ImageRepo;
 import com.example.difference_clinic.services.ProductService;
+
+import java.time.LocalDateTime;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.io.IOException;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +37,9 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ImageRepo imageRepo;
+
     // all
     @GetMapping(path ="/showAllProduct")
     public Object showAll(){
@@ -45,15 +61,27 @@ public class ProductController {
     }
     
     // dashboard
-    @PostMapping(path ="/addProduct")
-	public Object addProduct(@RequestBody ProductEntity product) { 
-          try {
-            productService.addProduct(product);
-		return product;
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
+    @PostMapping("/addProduct")
+    public ResponseEntity addProduct(@RequestParam("file") MultipartFile file, @RequestParam("product") ProductRequest productRequest) {
+	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	Path path = Paths.get("attachments/" + fileName);
+	try {
+		Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+	} catch (IOException e) {
+		e.printStackTrace();
 	}
+	LocalDateTime myObj = LocalDateTime.now();
+	Image image = new Image();
+    image.setFileName(myObj+fileName);
+    imageRepo.save(image);
+    ProductEntity productEntity = new ProductEntity();
+	productEntity.setName(productRequest.getName());
+	productEntity.setPrice(productRequest.getPrice());
+	productEntity.setDescription(productRequest.getDescription());
+	productEntity.setImage(image);
+   
+	return ResponseEntity.ok(productService.addProduct(productEntity));
+}
     
     @DeleteMapping(path = "/deleteProduct")
     public boolean deleteProduct(@RequestParam(name = "id") Long id)    
@@ -61,20 +89,30 @@ public class ProductController {
         return productService.deleteProduct(id);
     }
 
-    @PutMapping(path ="/updateProduct")
-    public Object updateProduct(@RequestParam(name = "id") Long id, @RequestBody ProductEntity product){
-        try {
-        ProductEntity updateProduct = productService.getProduct(id);
+
+    @PutMapping("/updateProduct")
+    public ResponseEntity updateProduct(@RequestParam(name = "id") Long id,@RequestParam("file") MultipartFile file, @RequestParam("product") ProductRequest product) {
+	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	Path path = Paths.get("attachments/" + fileName);
+	try {
+		Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	LocalDateTime myObj = LocalDateTime.now();
+	Image image = new Image();
+    image.setFileName(myObj+fileName);
+    imageRepo.save(image);
+
+    ProductEntity updateProduct = productService.getProduct(id);
         updateProduct.setName(product.getName());
         updateProduct.setPrice(product.getPrice());
-        updateProduct.setImage(product.getImage());
+        
         updateProduct.setDescription(product.getDescription());
-        productService.updateProduct(id, updateProduct);
-        return updateProduct;
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-    }
+        updateProduct.setImage(image);
+   
+	return ResponseEntity.ok(productService.updateProduct(id, updateProduct));
+}
 
 
 }

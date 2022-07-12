@@ -16,7 +16,6 @@ import com.example.difference_clinic.payload.request.LoginRequest;
 import com.example.difference_clinic.payload.request.SignupRequest;
 import com.example.difference_clinic.payload.request.VerificationRequest;
 import com.example.difference_clinic.payload.response.FullResponse;
-import com.example.difference_clinic.payload.response.JwtResponse;
 import com.example.difference_clinic.payload.response.MessageResponse;
 import com.example.difference_clinic.repositories.RoleRepository;
 import com.example.difference_clinic.repositories.UserRepo;
@@ -80,7 +79,8 @@ public class AuthController {
           .collect(Collectors.toList());
       UserEntity userEntity = new UserEntity();
       userEntity = userRepo.findByUsername(userDetails.getUsername());
-
+      if (userEntity.getIsActive() == false)
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: You have not completed the registration process. "); 
       FullResponse fullResponse = new FullResponse();
       fullResponse.setId(userDetails.getId());
       fullResponse.setUsername(userDetails.getUsername());
@@ -123,6 +123,7 @@ public class AuthController {
     user.setJob(signUpRequest.getJob());
     user.setBirthday(signUpRequest.getBirthday());
     user.setScore(100l);
+    user.setSocialStatus(signUpRequest.getSocialStatus());
     user.setStatus(false);
     user.setIsActive(false);
     String zipCode = genint(user);

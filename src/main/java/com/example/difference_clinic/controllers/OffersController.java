@@ -1,6 +1,7 @@
 package com.example.difference_clinic.controllers;
 
 import com.example.difference_clinic.entities.OffersEntity;
+import com.example.difference_clinic.services.ImageStorageService;
 import com.example.difference_clinic.services.OffersService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(path = "api/v1/Offers")
@@ -23,6 +25,8 @@ public class OffersController {
   
     @Autowired
     OffersService offersService;
+    @Autowired
+    ImageStorageService imageStoragesService;
 
     // all
     @GetMapping(path ="/showAllOffers")
@@ -45,10 +49,12 @@ public class OffersController {
     
     // dashboard
     @PostMapping(path ="/addOffer")
-	public Object addOffer(@RequestBody OffersEntity offer) { 
+	public Object addOffer(@RequestParam("photo") MultipartFile photo, @RequestBody OffersEntity offer) {
           try {
-            offersService.addOffer(offer);
-		return offer;
+              String imageName = imageStoragesService.save(photo);
+              offer.setImage(imageName);
+              offersService.addOffer(offer);
+              return offer;
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }

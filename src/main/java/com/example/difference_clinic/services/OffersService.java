@@ -1,5 +1,6 @@
 package com.example.difference_clinic.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class OffersService {
     @Autowired
     private OffersRepo offersRepo;
 
+	@Autowired
+	ImageStorageService imageStoragesService;
     public List<OffersEntity> showAllOffers(){
         
 		List<OffersEntity> Offers = new ArrayList<OffersEntity>();
@@ -34,7 +37,13 @@ public class OffersService {
 
     public boolean deleteOffer(Long id)
     {
-        offersRepo.delete(offersRepo.findById(id).orElseThrow());
+		try {
+			OffersEntity offer = offersRepo.getById(id);
+			imageStoragesService.delete(offer.getImage());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		offersRepo.delete(offersRepo.findById(id).orElseThrow());
         return offersRepo.findById(id).isEmpty();
     }
 

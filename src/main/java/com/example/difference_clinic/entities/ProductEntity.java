@@ -7,14 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.Builder;
-
-
-
-@Builder
 @Entity
 @Table(name = "Product")
 public class ProductEntity {
@@ -24,15 +18,15 @@ public class ProductEntity {
     private Long id;
     private String name;
     private String price;
-    @OneToOne
-    private Image image;
+    private String image;
     private String description;
+
 
 
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id, String name, String price, Image image, String description) {
+    public ProductEntity(Long id, String name, String price, String image, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -64,11 +58,11 @@ public class ProductEntity {
         this.price = price;
     }
 
-    public Image getImage() {
+    public String getImage() {
         return this.image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -95,7 +89,7 @@ public class ProductEntity {
         return this;
     }
 
-    public ProductEntity image(Image image) {
+    public ProductEntity image(String image) {
         setImage(image);
         return this;
     }
@@ -131,5 +125,5 @@ public class ProductEntity {
             ", description='" + getDescription() + "'" +
             "}";
     }
-
+   
 }

@@ -22,62 +22,65 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(path = "api/v1/Offers")
 @CrossOrigin("*")
 public class OffersController {
-  
+
     @Autowired
     OffersService offersService;
     @Autowired
     ImageStorageService imageStoragesService;
 
     // all
-    @GetMapping(path ="/showAllOffers")
-    public Object showAll(){
+    @GetMapping(path = "/showAllOffers")
+    public Object showAll() {
         try {
             return offersService.showAllOffers();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
     // mobile
-    @GetMapping(path = "/detailesOffer")
-    public Object detailesOffer(@RequestParam(name = "id") Long id){
+    @GetMapping(path = "/detailsOffer")
+    public Object detailsOffer(@RequestParam(name = "id") Long id) {
         try {
             return offersService.getOffer(id);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-    
+
     // dashboard
-    @PostMapping(path ="/addOffer")
-	public Object addOffer(@RequestParam("photo") MultipartFile photo, @RequestBody OffersEntity offer) {
-          try {
-              String imageName = imageStoragesService.save(photo);
-              offer.setImage(imageName);
-              offersService.addOffer(offer);
-              return offer;
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    @PostMapping(path = "/addOffer")
+    public Object addOffer(@RequestParam("photo") MultipartFile photo,  OffersEntity offer) {
+        try {
+            String imageName = imageStoragesService.save(photo);
+            offer.setImage(imageName);
+            offersService.addOffer(offer);
+            return offer;
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
-	}
-    
+
     @DeleteMapping(path = "/deleteOffer")
-    public boolean deleteOffer(@RequestParam(name = "id") Long id)    
-    {
+    public boolean deleteOffer(@RequestParam(name = "id") Long id) {
         return offersService.deleteOffer(id);
     }
 
-    @PutMapping(path ="/updateOffer")
-    public Object updateOffer(@RequestParam(name = "id") Long id, @RequestBody OffersEntity offer){
+    @PutMapping(path = "/updateOffer")
+    public Object updateOffer(@RequestParam("photo") MultipartFile photo,  OffersEntity offer) {
+
+        String imageName = imageStoragesService.save(photo);
+            offer.setImage(imageName);
         try {
-        OffersEntity updateOffer = offersService.getOffer(id);
-        updateOffer.setTitle(offer.getTitle());
-        updateOffer.setDescription(offer.getDescription());
-        updateOffer.setImage(offer.getImage());
-        offersService.updateOffer(id, updateOffer);
-        return updateOffer;
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
+            OffersEntity updateOffer = offersService.getOffer(offer.getId());
+            updateOffer.setTitle(offer.getTitle());
+            updateOffer.setDescription(offer.getDescription());
+            updateOffer.setImage(offer.getImage());
+            offersService.updateOffer(offer.getId(), updateOffer);
+            return updateOffer;
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 

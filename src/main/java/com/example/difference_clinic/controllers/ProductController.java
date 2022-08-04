@@ -1,6 +1,8 @@
 package com.example.difference_clinic.controllers;
 
+import com.example.difference_clinic.entities.OffersEntity;
 import com.example.difference_clinic.entities.ProductEntity;
+import com.example.difference_clinic.services.ImageStorageService;
 import com.example.difference_clinic.services.ProductService;
 
 import java.time.LocalDateTime;
@@ -34,6 +36,9 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ImageStorageService imageStorageService;
+
 
     // all
     @GetMapping(path ="/showAllProduct")
@@ -44,10 +49,23 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    // dashboard
+    @PostMapping(path = "/addProduct")
+    public Object addOffer(@RequestParam("photo") MultipartFile photo,  ProductEntity product) {
+        try {
+            String imageName = imageStorageService.save(photo);
+            product.setImage(imageName);
+            productService.addProduct(product);
+            return product;
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     
     // mobile
-    @GetMapping(path = "/detailesProduct")
-    public Object detailesProduct(@RequestParam(name = "id") Long id){
+    @GetMapping(path = "/detailsProduct")
+    public Object detailsProduct(@RequestParam(name = "id") Long id){
         try {
             return productService.getProduct(id);
         } catch (Exception e) {
@@ -62,7 +80,23 @@ public class ProductController {
         return productService.deleteProduct(id);
     }
 
+    @PutMapping(path = "/updateProduct")
+    public Object updateOffer(@RequestParam("photo") MultipartFile photo,  ProductEntity product) {
 
+        String imageName = imageStorageService.save(photo);
+        product.setImage(imageName);
+        try {
+            ProductEntity updateProduct = productService.getProduct(product.getId());
+            updateProduct.setName(product.getName());
+            updateProduct.setDescription(product.getDescription());
+            updateProduct.setImage(product.getImage());
+            updateProduct.setPrice(product.getPrice());
+            productService.updateProduct(product.getId(), updateProduct);
+            return updateProduct;
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
 
 

@@ -1,13 +1,16 @@
 package com.example.difference_clinic.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.difference_clinic.entities.ProductEntity;
 import com.example.difference_clinic.entities.worksEntity;
 import com.example.difference_clinic.repositories.WorksRepo;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +18,9 @@ public class WorksService {
     
     @Autowired
     private WorksRepo worksRepo;
+
+	@Autowired
+	ImageStorageService imageStorageService;
 
     public List<worksEntity> showAllworks(){
         
@@ -35,6 +41,13 @@ public class WorksService {
 
     public boolean deletework(Long id)
     {
+		try {
+			worksEntity works = worksRepo.getById(id);
+			imageStorageService.delete(works.getImage());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
         worksRepo.delete(worksRepo.findById(id).orElseThrow());
         return worksRepo.findById(id).isEmpty();
     }

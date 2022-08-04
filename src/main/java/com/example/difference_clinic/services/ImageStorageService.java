@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Random;
 
 @Service
 public class ImageStorageService {
@@ -22,7 +23,9 @@ public class ImageStorageService {
     
     public String save(MultipartFile file) {
         try {
-            String newName = new Date() +"."+ file.getOriginalFilename();
+            Random rand = new Random();
+            String newName = rand.nextInt()+'.'+file.getOriginalFilename();
+
             Files.copy(file.getInputStream(), this.directory.resolve(newName));
             return newName;
         } catch (Exception e) {

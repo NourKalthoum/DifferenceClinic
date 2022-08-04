@@ -60,8 +60,8 @@ public class DifferenceClinicApplication {
         };
     }
 
-    @Resource
-    ImageStorageService imageStorage;
+    // @Resource
+    // ImageStorageService imageStorage;
 //     @Override
 //   public void run(String... arg) throws Exception {
 // //		imageStorage.init();

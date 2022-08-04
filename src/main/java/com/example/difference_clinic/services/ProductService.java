@@ -1,9 +1,11 @@
 package com.example.difference_clinic.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
+import com.example.difference_clinic.entities.OffersEntity;
 import com.example.difference_clinic.entities.ProductEntity;
 import com.example.difference_clinic.repositories.ProductRepo;
 
@@ -15,6 +17,9 @@ public class ProductService {
   
     @Autowired
     private ProductRepo productRepo;
+
+	@Autowired
+	private ImageStorageService imageStorageService;
 
     public List<ProductEntity> showAllProduct(){
         
@@ -35,6 +40,13 @@ public class ProductService {
 
     public boolean deleteProduct(Long id)
     {
+		try {
+			ProductEntity product = productRepo.getById(id);
+			imageStorageService.delete(product.getImage());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
         productRepo.delete(productRepo.findById(id).orElseThrow());
         return productRepo.findById(id).isEmpty();
     }
